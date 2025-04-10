@@ -21,7 +21,7 @@ const recipeSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    originalPoster: {
+    originalPoster: { // i forgot the word for author, change this at polishing stage lol
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true,
@@ -32,7 +32,7 @@ const recipeSchema = new Schema({
             ref: "Comment",
         },
     ],
-    // stretch goal: likes.
+    // TODO stretch goal: likes.
 });
 
 const Recipe = model("Recipe", recipeSchema);

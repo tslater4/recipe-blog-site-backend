@@ -7,7 +7,7 @@ const User = require('../models/user');
 // grabs every user from the database
 router.get('/', verifyToken, async (req, res) => {
   try {
-    const users = await User.find({}, "username");
+    const users = await User.find({}, "username recipes");
     if (!users) {
       return res.status(404).json({ err: 'Users not found' });
     }
@@ -21,10 +21,6 @@ router.get('/', verifyToken, async (req, res) => {
 router.get('/:userId', verifyToken, async (req, res) => {
     console.log(req.user);
   try {
-    // checks if user is the user of the page
-    // if (req.user._id !== req.params.userId){
-    //     return res.status(403).json({ err: "Unauthorized"});
-    //   }
     const user = await User.find({}, "username");
     if (!user) {
         return res.status(404).json({ err: 'User not found' });

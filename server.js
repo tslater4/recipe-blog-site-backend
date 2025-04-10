@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -18,11 +19,9 @@ mongoose.connection.on('connected', () => {
 app.use(cors());
 app.use(express.json());
 app.use(logger('dev'));
+app.use(bodyParser.json());
 
-// middleware 
 
-
-// routes
 app.use('/test-jwt', testJwtRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);

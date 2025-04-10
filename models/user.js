@@ -9,6 +9,12 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    recipes: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Recipe",
+        },
+    ],
 });
 
 // delete password so it doesnt leak to user
