@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const verifyToken = require('../middlewear/verify-token');
+const verifyToken = require('../middleware/verify-token');
 const User = require('../models/user');
+
 // grabs every user from the database
 router.get('/', verifyToken, async (req, res) => {
   try {
