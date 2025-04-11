@@ -95,7 +95,7 @@ router.delete("/:recipeId", verifyToken, async (req, res) => {
         if (req.user._id.toString() !== recipe.originalPoster.toString()) {
             return res.status(403).json({ err: 'Unauthorized' });
         }
-        await recipe.findByIdAndDelete(req.params);
+        await Recipe.findByIdAndDelete(req.params.recipeId);
         res.json({ message: 'Recipe deleted' });
     } catch (err) {
         res.status(500).json({ error: err.message });
