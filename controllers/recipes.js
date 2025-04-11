@@ -138,7 +138,56 @@ router.get("/:recipeId/comments", verifyToken, async (req, res) => {
     }
 });
 
+// retrieves a specific comment for a specified recipe
+router.get("/:recipeId/comments/:commentId", verifyToken, async (req, res) => {
+    try {
+        const recipe = await Recipe.findById(req.params.recipeId);
+        const comment = await Comment.findById(req.params.commentId);
+        if (!recipe || !comment) {
+            return res.status(404).json({ err: 'Comment not found' });
+        }
+        res.json(comment);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// updates specific comment for a specified recipe
+router.put("/:recipeId/comments/:commentId", verifyToken, async (req, res) => {
+    try {
+        const recipe = await Recipe.findById(req.params.recipeId);
+        const comment = await Comment.findById(req.params.commentId);
+        if (!recipe || !comment) {
+            return res.status(404).json({ err: 'Comment does not exist.' });
+        }
+        if (req.user._id.toString() !== comment.commentAuthor.toString()) {
+            return res.status(403).json({ err: 'Unauthorized' });
+        }
+        const { content } = req.body;
+        comment.content = content;
+        await comment.save();
+        res.json(comment);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// delete specific comment on specific post
+router.delete("/:recipeId/comments/:commentId", verifyToken, async (req, res) => {
+    try {
+        const recipe = await Recipe.findById(req.params.recipeId);
+        const comment = await Comment.findById(req.params.commentId);
+        if (!recipe || !comment) {
+            return res.status(404).json({ err: 'Comment does not exist.' });
+        }
+        // check if user is the original poster or the comment author
+        if (req.user._id.toString() !== recipe.originalPoster.toString() 
+            && req.user._id.toString() !== comment.commentAuthor.toString()) {
+            return res.status(403).json({ err: 'Unauthorized' });
+        }
+        await Comment.findByIdAndDelete(req.params.commentId);
+        res.json({ message: 'Recipe deleted' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 
-
-
+});
 module.exports = router;
