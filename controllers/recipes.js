@@ -95,8 +95,23 @@ router.delete("/:recipeId", verifyToken, async (req, res) => {
         if (req.user._id.toString() !== recipe.originalPoster.toString()) {
             return res.status(403).json({ err: 'Unauthorized' });
         }
-        await Recipe.findByIdAndDelete(req.params.recipeId);
+            await Recipe.findByIdAndDelete(req.params.recipeId);
         res.json({ message: 'Recipe deleted' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
+// retrieves all comments for a specified recipe
+router.get("/:recipeId/comments", verifyToken, async (req, res) => {
+    try {
+        const recipe = await Recipe.findById(req.params.recipeId).populate('comments');
+        if (!recipe) {
+            return res.status(404).json({ err: 'Recipe not found' });
+        }
+        res.json(recipe.comments);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -109,9 +124,9 @@ router.post("/:recipeId/comments", verifyToken, async (req, res) => {
         if (!recipe) {
             return res.status(404).json({ err: 'Recipe not found' });
         }
-        const { content } = req.body;
+        const { text } = req.body;
         const comment = new Comment({
-            content,
+            text,
             createdAt: Date.now(),
             commentAuthor: req.user._id,
             originalPost: recipe._id,
@@ -162,8 +177,8 @@ router.put("/:recipeId/comments/:commentId", verifyToken, async (req, res) => {
         if (req.user._id.toString() !== comment.commentAuthor.toString()) {
             return res.status(403).json({ err: 'Unauthorized' });
         }
-        const { content } = req.body;
-        comment.content = content;
+        const { text } = req.body;
+        comment.text = text;
         await comment.save();
         res.json(comment);
     } catch (err) {
@@ -188,6 +203,19 @@ router.delete("/:recipeId/comments/:commentId", verifyToken, async (req, res) =>
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-
 });
+
+// retrieves all comments
+router.get("/comments", verifyToken, async (req, res) => {
+    try {
+        const comments = await Comment.find({});
+        if (!comments) {
+            return res.status(404).json({ err: 'No comments found' });
+        }
+        res.json(comments);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;
