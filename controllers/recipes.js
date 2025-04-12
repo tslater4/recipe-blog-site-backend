@@ -43,7 +43,6 @@ router.get("/" , verifyToken, async (req, res) => {
         if (!recipes) {
           return res.status(404).json({ err: 'Recipes not found' });
         }
-        console.log(recipes);
         res.json(recipes);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -57,7 +56,6 @@ router.get("/:recipeId", verifyToken, async (req, res) => {
         if (!recipe) {
             return res.status(404).json({ err: 'Recipe not found' });
         }
-        console.log(recipe);
         res.json(recipe);
     } catch (err) {
         res.status(500).json({ error: err.message });

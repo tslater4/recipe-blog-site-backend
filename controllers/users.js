@@ -19,7 +19,6 @@ router.get('/', verifyToken, async (req, res) => {
 
 // grabs a specific user from the database
 router.get('/:userId', verifyToken, async (req, res) => {
-    console.log(req.user);
   try {
     const user = await User.findById(req.params.userId);
     if (!user) {

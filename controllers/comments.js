@@ -14,7 +14,6 @@ router.get("/", verifyToken, async (req, res) => {
         if (!comments) {
           return res.status(404).json({ err: 'Comments not found' });
         }
-        console.log(comments);
         res.json(comments);
     } catch (err) {
         res.status(500).json({ error: err.message });

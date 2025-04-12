@@ -10,7 +10,6 @@ const saltRounds = 12; // level of padding given to pre-encrypted password
 // allows creation of new account if username is not taken
 router.post('/sign-up', async (req, res) => {
     try {
-        console.log(req.body); // debugging line
         const userInDatabase = await User.findOne({ username: req.body.username });
 
         if (userInDatabase) {
