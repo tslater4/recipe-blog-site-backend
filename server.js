@@ -28,6 +28,7 @@ app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/recipes', recipeRouter);
 app.use('/comments', commentsRouter); 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log('The express app is ready!');
 });
+
